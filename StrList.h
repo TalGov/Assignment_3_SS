@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
-
+#define MAX_STRING_SIZE 100
 /********************************************************************************
  *
  * A StrList library.
@@ -19,6 +19,9 @@
 struct _StrList;
 typedef struct _StrList StrList;
 
+/*
+ * Node represents a node of StrList.
+ */
 struct Node;
 typedef struct Node node;
 
@@ -28,11 +31,14 @@ typedef struct Node node;
  */
 StrList* StrList_alloc();
 
+node* Node_alloc(char data[MAX_STRING_SIZE],node* next);
 /*
  * Frees the memory and resources allocated to StrList.
  * If StrList==NULL does nothing (same as free).
  */
 void StrList_free(StrList* StrList);
+
+void Node_free(node* n);
 
 /*
  * Returns the number of elements in the StrList.

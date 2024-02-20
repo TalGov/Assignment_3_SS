@@ -13,4 +13,4 @@ StrList.o: StrList.c StrList.h
 	$(CC) $(CFLAGS) -c StrList.c -o StrList.o
 
 clean:
-	rm -f *.o StrList
+	rm -f *.o StrList.exe
