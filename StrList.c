@@ -74,7 +74,7 @@ void Node_free(Node* n)
 //Returns the number of elements in the StrList.
 size_t StrList_size(const StrList* StrList)
 {
-    return StrList->size;
+    return (size_t)StrList->size;
 }
 
 //Inserts an element in the end of the StrList.
@@ -112,7 +112,7 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     Node* current = StrList->head;
     Node* next_node = NULL;
     // reach the wanted index - 1
-    for (int i = 0; i < index; i++)
+    for (int i = 0; i < index - 1; i++)
     {
         next_node = current->next;
         current = next_node;
@@ -128,6 +128,8 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     current->next = new_node;
     // put the child of the new node to be the node at index
     new_node->next = next_node;
+
+	StrList->size += 1;
 }
 
 //Returns the StrList first data.
@@ -154,8 +156,7 @@ void StrList_printAt(const StrList* Strlist,int index)
 {
     Node* n = Strlist->head;
     int i = 0;
-
-    while (n != NULL)
+    while (n)
     {
         if (i == index)
         {
@@ -169,29 +170,93 @@ void StrList_printAt(const StrList* Strlist,int index)
 //Return the amount of chars in the list.
 int StrList_printLen(const StrList* Strlist)
 {
-    return 0;
+    Node * current = Strlist->head;
+	int count = 0;
+	while (current)
+	{
+		count += (int)strlen(current->string);
+		current = current->next;
+	}
+
+	return count;
 }
 
 //Given a string, return the number of times it exists in the list.
 int StrList_count(StrList* StrList, const char* data)
 {
-    return 0;
-}
-
-//Given a string and a list, remove all the appearences of this string in the list.
-void StrList_remove(StrList* StrList, const char* data)
-{
-
-
-}
-
-//Given an index and a list, remove the string at that index.
-void StrList_removeAt(StrList* StrList, int index)
-{
-
+	Node * current = StrList->head;
+	int count = 0;
+	while (current)
+	{
+		if (strcmp(current->string, data) == 0)
+		{
+			count += 1;
+		}
+		current = current->next;
+	}
+	return count;
 }
 
 /*
+ * Given a string and a list, remove all the appearances of this string in the list.
+ */
+void StrList_remove(StrList* StrList, const char* data)
+{
+	// iterating over all the nodes
+	Node* current = StrList->head;
+	Node* next_node = NULL;
+	int index = 0;
+	while (current->next)
+	{
+		// if the current node data is equal to the deleted string
+		if (strcmp(current->string,data) == 0)
+		{
+			StrList_removeAt(StrList, index);
+		}
+		else
+		{
+			index +=1;
+		}
+
+		next_node = current->next;
+		current = next_node;
+	}
+}
+
+/**
+ * Given an index and a list, remove the string at that index.
+ */
+void StrList_removeAt(StrList* StrList, int index)
+{
+
+	Node* current = StrList->head;
+	Node* next_node = NULL;
+	Node* prev = NULL;
+	// reach the wanted index
+	for (int i = 0; i < index; i++)
+	{
+		next_node = current->next;
+		prev = current;
+		current = next_node;
+	}
+
+	// putting his prev child to be his next child
+	if (prev == NULL){ // mean we are deleting the head
+		StrList->head = current->next;
+	}
+	else
+	{
+		prev->next = current->next;
+	}
+
+	// free the skipped node
+	Node_free(current);
+	StrList->size -= 1;
+
+
+}
+
+/**
  * Checks if two StrLists have the same elements
  * returns 0 if not and any other number if yes
  */
@@ -263,14 +328,63 @@ void StrList_reverse( StrList* StrList)
     current->next = prev;
     StrList->head = current;
 }
+void swap(char** xp, char** yp)
+{
+	char* temp = *xp;
+	*xp = *yp;
+	*yp = temp;
+}
+
+// An optimized version of Bubble Sort
+void sort_array(char * array[], int n)
+{
+	int i, j;
+	int swapped = 0;
+	for (i = 0; i < n - 1; i++) {
+		swapped = 0;
+		for (j = 0; j < n - i - 1; j++) {
+			if (strcmp(array[j], array[j + 1]) > 0) {
+				swap(&array[j], &array[j + 1]);
+				swapped = 1;
+			}
+		}
+
+		// If no two elements were swapped by inner loop,
+		if (swapped == 0)
+			break;
+	}
+}
+
+
 
 //Sort the given list in lexicographical order
 void StrList_sort( StrList* StrList)
 {
+	// extracting all the string into an array
+	char* array[StrList_size(StrList)];
+
+	Node* current = StrList->head;
+	for (int i = 0;current; i += 1)
+	{
+		array[i] = current->string;
+		current = current->next;
+	}
+
+	// sorting the array with an helper function
+	sort_array(array, (int)StrList_size(StrList));
+
+	// putting back all the data in the right order
+	current = StrList->head;
+	for (int i = 0;current; i += 1)
+	{
+
+		current->string = array[i];
+		current = current->next;
+	}
 
 }
 
-/*
+/**
  * Checks if the given list is sorted in lexicographical order
  * returns 1 for sorted,   0 otherwise
  */
