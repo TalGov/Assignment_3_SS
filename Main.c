@@ -86,7 +86,7 @@ int main()
                 break;
 
             case 11:
-                StrList_clone(SList);
+                StrList_free(SList); //////////to fix//// we need to free the nodes and not the list
                 break;
 
             case 12:

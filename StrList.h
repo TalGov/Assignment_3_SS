@@ -20,10 +20,10 @@ struct _StrList;
 typedef struct _StrList StrList;
 
 /*
- * Node represents a node of StrList.
+ * Node represents a Node of StrList.
  */
 struct Node;
-typedef struct Node node;
+typedef struct Node Node;
 
 /*
  * Allocates a new empty StrList.
@@ -31,14 +31,14 @@ typedef struct Node node;
  */
 StrList* StrList_alloc();
 
-node* Node_alloc(char data[MAX_STRING_SIZE],node* next);
+Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next);
 /*
  * Frees the memory and resources allocated to StrList.
  * If StrList==NULL does nothing (same as free).
  */
 void StrList_free(StrList* StrList);
 
-void Node_free(node* n);
+void Node_free(Node* n);
 
 /*
  * Returns the number of elements in the StrList.
@@ -102,7 +102,7 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2);
  * Clones the given StrList. 
  * It's the user responsibility to free it with StrList_free.
  */
-StrList* StrList_clone(const StrList* StrList);
+StrList* StrList_clone(const StrList* StList);
 
 /*
  * Reverces the given StrList. 
@@ -118,6 +118,6 @@ void StrList_sort( StrList* StrList);
  * Checks if the given list is sorted in lexicographical order
  * returns 1 for sorted,   0 otherwise
  */
-int StrList_isSorted(StrList* StrList);
+int StrList_isSorted(StrList* SrList);
 
 
