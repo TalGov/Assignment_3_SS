@@ -10,7 +10,7 @@ struct Node
 
 struct _StrList
 {
-    int size;
+    size_t size;
     struct Node* head;
 };
 
@@ -39,8 +39,14 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
         printf("Error Node alloc!");
         return 0;
     }
-    n->string = (char *)malloc(strlen(data)+1);
-    n->next= next;
+    n->string = (char*) malloc(strlen(data) + 1); // todo
+	n->string = data;
+	if(n->string == NULL)
+	{
+		printf("Error Node->String alloc!");
+		return 0;
+	}
+    n->next = next;
     return n;
 }
 
@@ -63,7 +69,6 @@ void StrList_free(StrList* StrList)
         n1= n1->next;
         Node_free(n2);
     }
-    free(StrList);
 }
 
 void Node_free(Node* n)
@@ -74,14 +79,12 @@ void Node_free(Node* n)
 //Returns the number of elements in the StrList.
 size_t StrList_size(const StrList* StrList)
 {
-    return (size_t)StrList->size;
+    return StrList->size;
 }
 
 //Inserts an element in the end of the StrList.
 void StrList_insertLast(StrList* StrList,const char* data)
 {
-    ///////////todo////////////
-
     char* temp_data = strdup(data); //covert const char to char
     Node* n = Node_alloc(temp_data, NULL);
 
@@ -102,7 +105,6 @@ void StrList_insertLast(StrList* StrList,const char* data)
         //add the newNode at the end of the linked list
         last_Node->next = n;
     }
-
     StrList-> size++;
 }
 
@@ -145,10 +147,10 @@ void StrList_print(const StrList* StrList)
 
     while(p)
     {
-        printf("%s->",p->string);
+        printf("%s ", p->string);
         p = p->next;
     }
-    printf("size:%d\n ",StrList->size);
+	printf("\n");
 }
 
 //Prints the word at the given index to the standard output.
@@ -204,23 +206,28 @@ void StrList_remove(StrList* StrList, const char* data)
 {
 	// iterating over all the nodes
 	Node* current = StrList->head;
-	Node* next_node = NULL;
+	Node* next_node = current->next;
 	int index = 0;
-	while (current->next)
+	while (current)
 	{
 		// if the current node data is equal to the deleted string
-		if (strcmp(current->string,data) == 0)
+		if (strcmp(current->string, data) == 0)
 		{
 			StrList_removeAt(StrList, index);
+			current = next_node;
 		}
 		else
 		{
 			index +=1;
+			current = current->next;
 		}
-
-		next_node = current->next;
-		current = next_node;
+		if (current)
+		{
+			next_node = current->next;
+		}
 	}
+	// putting Null at the StrList head
+	StrList->head = NULL;
 }
 
 /**

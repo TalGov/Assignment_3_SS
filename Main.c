@@ -9,6 +9,8 @@ int main()
     char data[MAX_STRING_SIZE];
     int index;
     StrList* SList = StrList_alloc();
+	size_t size;
+	int count;
 
     while(1)
     {
@@ -30,7 +32,7 @@ int main()
                 }
                 break;
 
-            case 2:
+            case 2: // insert at
                 printf("Enter the index:");
                 scanf("%d", &index);
 
@@ -46,11 +48,13 @@ int main()
                 break;
 
             case 3:
+				printf("%p", SList);
                 StrList_print(SList);
                 break;
 
             case 4:
-                StrList_size(SList);
+                 size = StrList_size(SList);
+				printf("%zu\n",size);
                 break;
 
             case 5:
@@ -60,13 +64,15 @@ int main()
                 break;
 
             case 6:
-                StrList_printLen(SList);
+                count = StrList_printLen(SList);
+				printf("%d\n", count);
                 break;
 
             case 7:
                 printf("Enter the string:");
                 scanf("%s", data);
-                StrList_count(SList,data);
+                count = StrList_count(SList,data);
+				printf("%d\n", count);
                 break;
 
             case 8 :
@@ -86,7 +92,8 @@ int main()
                 break;
 
             case 11:
-                StrList_free(SList); //////////to fix//// we need to free the nodes and not the list
+                StrList_free(SList);
+
                 break;
 
             case 12:
@@ -94,11 +101,20 @@ int main()
                 break;
 
             case 13:
-                StrList_isSorted(SList);
+                count = StrList_isSorted(SList);
+				if (count == 0)
+				{
+					printf("true");
+				}
+				else
+				{
+					printf("false");
+				}
                 break;
 
             case 0:
                 StrList_free(SList);
+				free(SList);
                 return 0;
         }
     }
