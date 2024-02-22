@@ -6,9 +6,9 @@ int main()
 {
     int choice;
     int num;
-    char data[MAX_STRING_SIZE];
+    char data[MAX_STRING_SIZE]; // contains the input of the user through the program
     int index;
-    StrList* SList = StrList_alloc();
+    StrList* SList = StrList_alloc(); // the StrList that the user will manipulate
 	size_t size;
 	int count;
 

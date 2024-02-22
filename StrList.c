@@ -20,8 +20,9 @@ struct _StrList
  */
 StrList* StrList_alloc()
 {
+    // allocating the memory for the Strlist
     StrList* s= (StrList*)malloc(sizeof(StrList));
-    if(s == NULL)
+    if(s == NULL) // if the allocation failed
     {
         printf("Error StrList alloc!");
         return 0;
@@ -33,20 +34,22 @@ StrList* StrList_alloc()
 
 Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
 {
+    // allocation for the node struct
     Node* n= (Node*)malloc(sizeof(Node));
-    if(n == NULL)
+    if(n == NULL) // check for failed allocation
     {
         printf("Error Node alloc!");
         return 0;
     }
+    // allocating for the String data
     n->string = (char*) malloc(strlen(data) + 1);
-	n->string = data;
-	if(n->string == NULL)
+	n->string = data; // putting the data
+	if(n->string == NULL) // checking for failed allocation
 	{
 		printf("Error Node->String alloc!");
 		return 0;
 	}
-    n->next = next;
+    n->next = next; // the next node of the current node
     return n;
 }
 
@@ -62,9 +65,12 @@ void StrList_free(StrList* StrList)
     }
 }
 
+/**
+ * Free the memory of the node
+ */
 void Node_free(Node* n)
 {
-    free(n->string);
+    free(n->string); // free the string separately because allocated within the struct
     free(n);
 }
 
@@ -77,9 +83,10 @@ size_t StrList_size(const StrList* StrList)
 //Inserts an element in the end of the StrList.
 void StrList_insertLast(StrList* StrList,const char* data)
 {
-    char* temp_data = strdup(data); //covert const char to char
+    char* temp_data = strdup(data); //convert const char to char
     Node* n = Node_alloc(temp_data, NULL);
 
+    // check for failed allocation
     if(StrList->head == NULL)
     {
         StrList->head = n;
@@ -88,16 +95,16 @@ void StrList_insertLast(StrList* StrList,const char* data)
     {
         Node* last_Node = StrList->head;
 
-        //last Node's next address will be NULL
+        // last Node's next address will be NULL
         while(last_Node->next != NULL)
         {
             last_Node = last_Node->next;
         }
 
-        //add the newNode at the end of the linked list
+        // add the node at the end
         last_Node->next = n;
     }
-    StrList-> size++;
+    StrList-> size++; // incrementing the size by one
 }
 
 //Inserts an element at given index
@@ -136,8 +143,10 @@ char* StrList_firstData(const StrList* StrList)
 void StrList_print(const StrList* StrList)
 {
     const Node* p= StrList->head;
+    // iterating through all the nodes
     while(p)
     {
+        // print the stringsoter in the node
         printf("%s", p->string);
         if (p->next)
         {
@@ -153,11 +162,12 @@ void StrList_printAt(const StrList* Strlist,int index)
 {
     Node* n = Strlist->head;
     int i = 0;
-    while (n)
+    while (n) // iterating through the node until we reach NULL (the end of the linked list)
     {
-        if (i == index)
+        if (i == index) // if this node is the one wanted
         {
             printf("%s\n", n->string);
+            return;
         }
         i++;
         n = n->next;
@@ -168,10 +178,10 @@ void StrList_printAt(const StrList* Strlist,int index)
 int StrList_printLen(const StrList* Strlist)
 {
     Node * current = Strlist->head;
-	int count = 0;
+	int count = 0; // char counter
 	while (current)
 	{
-		count += (int)strlen(current->string);
+		count += (int)strlen(current->string); // using the built-in strlen function
 		current = current->next;
 	}
 
@@ -185,7 +195,7 @@ int StrList_count(StrList* StrList, const char* data)
 	int count = 0;
 	while (current)
 	{
-		if (strcmp(current->string, data) == 0)
+		if (strcmp(current->string, data) == 0) // comparing using the built-in String comparison
 		{
 			count += 1;
 		}
@@ -275,9 +285,9 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
     const Node* h1= StrList1->head;
     const Node* h2= StrList2->head;
 
-    while(h1)
+    while(h1) // as long as there is nodes left
     {
-        if (strcmp(h1-> string, h2->string) != 0)
+        if (strcmp(h1-> string, h2->string) != 0) // if the two node do not contain the same string
         {
             return _notequal;
         }
@@ -295,15 +305,15 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
 StrList* StrList_clone(const StrList* StList)
 {
     StrList* copyS= StrList_alloc();
-    const Node* old= StList->head;
-    Node** copy= &(copyS->head);
+    const Node* old = StList->head;
+    Node** copy = &(copyS->head); // copy the head
 
-    copyS->size = StrList_size(StList);
+    copyS->size = StrList_size(StList); // copying the size
 
     char* str;
     while(old)
     {
-        str = (char*)malloc(strlen(old->string)+1);
+        str = (char*)malloc(strlen(old->string)+1); // deepcopy the String
         strcpy(str, old->string);
         *copy= Node_alloc(str, NULL);
         old= old->next;
@@ -315,7 +325,7 @@ StrList* StrList_clone(const StrList* StList)
 //Reverses the given StrList.
 void StrList_reverse( StrList* StrList)
 {
-    if (StrList_size(StrList) == 0)
+    if (StrList_size(StrList) == 0)  // if the size is zero do nothing
     {
         return;
     }
@@ -338,6 +348,7 @@ void StrList_reverse( StrList* StrList)
     current->next = prev;
     StrList->head = current;
 }
+// simple swap function of strings
 void swap(char** xp, char** yp)
 {
 	char* temp = *xp;
@@ -345,7 +356,7 @@ void swap(char** xp, char** yp)
 	*yp = temp;
 }
 
-// An optimized version of Bubble Sort
+// 00Bubble Sort
 void sort_array(char * array[], int n)
 {
 	int i, j;
@@ -400,10 +411,10 @@ void StrList_sort( StrList* StrList)
  */
 int StrList_isSorted(StrList* StList)
 {
-    StrList* s = StrList_clone(StList);
-    StrList_sort(s);
+    StrList* s = StrList_clone(StList); // cloning the inputed list
+    StrList_sort(s); // sorting the cloned list
 
-    if(StrList_isEqual(StList,s ))
+    if(StrList_isEqual(StList,s )) // if the sorted version is equal to the original StrList
     {
         StrList_free(s);
         return 1;
