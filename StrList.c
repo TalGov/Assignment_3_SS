@@ -153,7 +153,7 @@ void StrList_printAt(const StrList* Strlist,int index)
     {
         if (i == index)
         {
-            printf("The string in index %d is : %s",index, n->string);
+            printf("%s\n", n->string);
         }
         i++;
         n = n->next;
@@ -268,9 +268,9 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
         return _equal;
     }
 
-
     const Node* h1= StrList1->head;
     const Node* h2= StrList2->head;
+
     while(h1)
     {
         if (strcmp(h1-> string, h2->string) != 0)

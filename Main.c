@@ -14,16 +14,13 @@ int main()
 
     while(1)
     {
-        printf("Enter your choice:");
         scanf("%d", &choice);
 
         //using in switch case
         switch (choice)
         {
             case 1:
-                printf("Enter number of strings:");
                 scanf("%d", &num);
-                printf("Enter %d strings:", num);
 
                 for(int i=0; i< num; i++)
                 {
@@ -33,16 +30,7 @@ int main()
                 break;
 
             case 2: // insert at
-                printf("Enter the index:");
                 scanf("%d", &index);
-
-                while (index > StrList_size(SList))
-                {
-                    printf("Error! Please Enter the index again:");
-                    scanf("%d", &index);
-                }
-
-                printf("Enter the string:");
                 scanf("%s", data);
                 StrList_insertAt(SList,data,index);
                 break;
@@ -52,12 +40,11 @@ int main()
                 break;
 
             case 4:
-                 size = StrList_size(SList);
+                size = StrList_size(SList);
 				printf("%zu\n",size);
                 break;
 
             case 5:
-                printf("Enter the index:");
                 scanf("%d", &index);
                 StrList_printAt(SList,index);
                 break;
@@ -68,20 +55,17 @@ int main()
                 break;
 
             case 7:
-                printf("Enter the string:");
                 scanf("%s", data);
                 count = StrList_count(SList,data);
 				printf("%d\n", count);
                 break;
 
             case 8 :
-                printf("Enter the string:");
                 scanf("%s", data);
                 StrList_remove(SList,data);
                 break;
 
             case 9:
-                printf("Enter the index:");
                 scanf("%d", &index);
                 StrList_removeAt(SList,index);
                 break;
@@ -103,11 +87,11 @@ int main()
                 count = StrList_isSorted(SList);
 				if (count == 0)
 				{
-					printf("false");
+					printf("false\n");
 				}
 				else
 				{
-					printf("true");
+					printf("true\n");
 				}
                 break;
 
