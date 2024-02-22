@@ -41,7 +41,7 @@ int main()
 
             case 4:
                 size = StrList_size(SList);
-				printf("%zu\n",size);
+				printf("%d\n",(int)size);
                 break;
 
             case 5:
