@@ -48,7 +48,6 @@ int main()
                 break;
 
             case 3:
-				printf("%p", SList);
                 StrList_print(SList);
                 break;
 
@@ -104,11 +103,11 @@ int main()
                 count = StrList_isSorted(SList);
 				if (count == 0)
 				{
-					printf("true");
+					printf("false");
 				}
 				else
 				{
-					printf("false");
+					printf("true");
 				}
                 break;
 

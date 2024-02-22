@@ -39,7 +39,7 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
         printf("Error Node alloc!");
         return 0;
     }
-    n->string = (char*) malloc(strlen(data) + 1); // todo
+    n->string = (char*) malloc(strlen(data) + 1);
 	n->string = data;
 	if(n->string == NULL)
 	{
@@ -56,23 +56,15 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
  */
 void StrList_free(StrList* StrList)
 {
-    if (StrList == NULL)
+    while(StrList->head)
     {
-        return;
-    }
-    Node* n1= StrList->head;
-    Node* n2;
-
-    while(n1)
-    {
-        n2 = n1;
-        n1= n1->next;
-        Node_free(n2);
+        StrList_removeAt(StrList, 0);
     }
 }
 
 void Node_free(Node* n)
 {
+    free(n->string);
     free(n);
 }
 
@@ -144,7 +136,6 @@ char* StrList_firstData(const StrList* StrList)
 void StrList_print(const StrList* StrList)
 {
     const Node* p= StrList->head;
-
     while(p)
     {
         printf("%s ", p->string);
@@ -226,8 +217,6 @@ void StrList_remove(StrList* StrList, const char* data)
 			next_node = current->next;
 		}
 	}
-	// putting Null at the StrList head
-	StrList->head = NULL;
 }
 
 /**
@@ -235,7 +224,10 @@ void StrList_remove(StrList* StrList, const char* data)
  */
 void StrList_removeAt(StrList* StrList, int index)
 {
-
+    if (StrList_size(StrList) == 0)
+    {
+        return;
+    }
 	Node* current = StrList->head;
 	Node* next_node = NULL;
 	Node* prev = NULL;
@@ -259,8 +251,6 @@ void StrList_removeAt(StrList* StrList, int index)
 	// free the skipped node
 	Node_free(current);
 	StrList->size -= 1;
-
-
 }
 
 /**
@@ -272,21 +262,23 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
     const int _equal= 1;
     const int _notequal= 0;
 
+
+    if (StrList1 == NULL && StrList2 == NULL)
+    {
+        return _equal;
+    }
+
+
     const Node* h1= StrList1->head;
     const Node* h2= StrList2->head;
-
     while(h1)
     {
-        if (h2==NULL || h1-> string != h2->string)
+        if (strcmp(h1-> string, h2->string) != 0)
         {
             return _notequal;
         }
         h1= h1->next;
         h2= h2->next;
-    }
-    if (h2 != NULL)
-    {
-        return _notequal;
     }
 
     return _equal;
@@ -302,11 +294,14 @@ StrList* StrList_clone(const StrList* StList)
     const Node* old= StList->head;
     Node** copy= &(copyS->head);
 
-    copyS->size= StList->size;
+    copyS->size = StrList_size(StList);
 
+    char* str;
     while(old)
     {
-        *copy= Node_alloc(old->string,NULL);
+        str = (char*)malloc(strlen(old->string)+1);
+        strcpy(str, old->string);
+        *copy= Node_alloc(str, NULL);
         old= old->next;
         copy= &((*copy)->next);
     }
@@ -316,6 +311,10 @@ StrList* StrList_clone(const StrList* StList)
 //Reverses the given StrList.
 void StrList_reverse( StrList* StrList)
 {
+    if (StrList_size(StrList) == 0)
+    {
+        return;
+    }
     Node* prev = NULL;
     Node* current = StrList->head;
     Node* next = current->next;
@@ -402,7 +401,9 @@ int StrList_isSorted(StrList* StList)
 
     if(StrList_isEqual(StList,s ))
     {
+        StrList_free(s);
         return 1;
     }
+    StrList_free(s);
     return 0;
 }
