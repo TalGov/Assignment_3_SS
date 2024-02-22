@@ -138,7 +138,11 @@ void StrList_print(const StrList* StrList)
     const Node* p= StrList->head;
     while(p)
     {
-        printf("%s ", p->string);
+        printf("%s", p->string);
+        if (p->next)
+        {
+            printf(" ");
+        }
         p = p->next;
     }
 	printf("\n");
