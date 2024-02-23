@@ -74,9 +74,15 @@ void StrList_free(StrList* StrList)
  */
 void Node_free(Node* n)
 {
-    free(n->string); // free the string separately because allocated within the struct
+    if (n == NULL) // Check if n is NULL
+    {
+        return;
+    }
+
+    free(n->string); // Free the string separately because it was allocated dynamically
     free(n);
 }
+
 
 //Returns the number of elements in the StrList.
 size_t StrList_size(const StrList* StrList)
@@ -418,13 +424,9 @@ int StrList_isSorted(StrList* StList)
     StrList* s = StrList_clone(StList); // cloning the inputed list
     StrList_sort(s); // sorting the cloned list
 
-    if(StrList_isEqual(StList,s )) // if the sorted version is equal to the original StrList
-    {
-        StrList_free(s);
-        free(s);
-        return 1;
-    }
+    int result = StrList_isEqual(StList,s ); // if the sorted version is equal to the original StrList
+
     StrList_free(s);
     free(s);
-    return 0;
+    return result;
 }
