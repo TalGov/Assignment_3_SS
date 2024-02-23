@@ -59,9 +59,18 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
  */
 void StrList_free(StrList* StrList)
 {
-    while(StrList->head)
+    if (StrList == NULL || StrList_size(StrList) == 0)
     {
-        StrList_removeAt(StrList, 0);
+        return;
+    }
+    Node* n1= StrList->head;
+    Node* n2;
+
+    while(n1)
+    {
+        n2 = n1;
+        n1= n1->next;
+        Node_free(n2);
     }
 }
 
