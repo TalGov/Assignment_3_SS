@@ -145,6 +145,7 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     {
         printf("Node allocation failed");
         free(temp_data);
+
     }
 
     // put the new node as child to the node index -1
