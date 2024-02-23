@@ -359,6 +359,7 @@ StrList* StrList_clone(const StrList* StList)
         }
         old= old->next;
         copy= &((*copy)->next);
+        free(str);
     }
     return copyS;
 }
@@ -454,6 +455,9 @@ int StrList_isSorted(StrList* StList)
 {
     StrList* s = StrList_clone(StList); // cloning the inputed list
     StrList_sort(s); // sorting the cloned list
+    if (s == NULL){
+        return 0;
+    }
 
     int result = StrList_isEqual(StList,s ); // if the sorted version is equal to the original StrList
 
