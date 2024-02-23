@@ -306,6 +306,7 @@ StrList* StrList_clone(const StrList* StList)
 {
     StrList* copyS= StrList_alloc();
     const Node* old = StList->head;
+    Node** copy = &(copyS->head); // copy the head
 
     copyS->size = StrList_size(StList); // copying the size
 
@@ -313,15 +314,10 @@ StrList* StrList_clone(const StrList* StList)
     while(old)
     {
         str = (char*)malloc(strlen(old->string)+1); // deepcopy the String
-        if(str == NULL)
-        {
-            printf("Error string alloc!");
-            return 0;
-        }
         strcpy(str, old->string);
-        StrList_insertLast(copyS, str);
-        free(str);
+        *copy= Node_alloc(str, NULL);
         old= old->next;
+        copy= &((*copy)->next);
     }
     return copyS;
 }
