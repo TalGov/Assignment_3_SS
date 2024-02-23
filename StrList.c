@@ -95,11 +95,11 @@ void StrList_insertLast(StrList* StrList,const char* data)
 {
     char* temp_data = strdup(data); //convert const char to char
     Node* n = Node_alloc(temp_data, NULL);
+    free(temp_data);
 
     if (n == NULL)
     {
         printf("Memory allocation failed");
-        free(temp_data);
         return;
     }
 
@@ -141,11 +141,11 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     // create a new node containing the data
     char* temp_data = strdup(data); //convert const char to char
     Node* new_node = Node_alloc(temp_data, NULL);
+    free(temp_data);
     if (new_node == NULL)
     {
         printf("Node allocation failed");
-        free(temp_data);
-
+        return;
     }
 
     // put the new node as child to the node index -1
@@ -330,6 +330,11 @@ StrList* StrList_clone(const StrList* StList)
     StrList* copyS= StrList_alloc();
     const Node* old = StList->head;
     Node** copy = &(copyS->head); // copy the head
+    if(copy == NULL)
+    {
+        printf("Clone memory allocation failed");
+        return NULL;
+    }
 
     copyS->size = StrList_size(StList); // copying the size
 
@@ -337,8 +342,21 @@ StrList* StrList_clone(const StrList* StList)
     while(old)
     {
         str = (char*)malloc(strlen(old->string)+1); // deepcopy the String
+        if (str == NULL)
+        {
+            printf("Error allocating memory for string in StrList_clone\n");
+            StrList_free(copyS); // Free memory allocated so far
+            return NULL;
+        }
         strcpy(str, old->string);
         *copy= Node_alloc(str, NULL);
+        if (*copy == NULL)
+        {
+            printf("Error allocating memory for node in StrList_clone\n");
+            free(str); // Free memory allocated for string
+            StrList_free(copyS); // Free memory allocated so far
+            return NULL;
+        }
         old= old->next;
         copy= &((*copy)->next);
     }
