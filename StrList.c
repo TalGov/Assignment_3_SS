@@ -48,7 +48,7 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
         printf("Error Node->String alloc!");
         return 0;
     }
-	n->string = data; // putting the data
+    strcpy(n->string,data); // putting the data
     n->next = next; // the next node of the current node
     return n;
 }
@@ -59,18 +59,13 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
  */
 void StrList_free(StrList* StrList)
 {
-    if (StrList == NULL || StrList_size(StrList) == 0)
+    if(StrList_size(StrList) == 0)
     {
         return;
     }
-    Node* n1= StrList->head;
-    Node* n2;
-
-    while(n1)
+    while(StrList->head)
     {
-        n2 = n1;
-        n1= n1->next;
-        Node_free(n2);
+        StrList_removeAt(StrList, 0);
     }
 }
 
