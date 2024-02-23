@@ -43,12 +43,12 @@ Node* Node_alloc(char data[MAX_STRING_SIZE], Node* next)
     }
     // allocating for the String data
     n->string = (char*) malloc(strlen(data) + 1);
+    if(n->string == NULL) // checking for failed allocation
+    {
+        printf("Error Node->String alloc!");
+        return 0;
+    }
 	n->string = data; // putting the data
-	if(n->string == NULL) // checking for failed allocation
-	{
-		printf("Error Node->String alloc!");
-		return 0;
-	}
     n->next = next; // the next node of the current node
     return n;
 }
@@ -306,7 +306,6 @@ StrList* StrList_clone(const StrList* StList)
 {
     StrList* copyS= StrList_alloc();
     const Node* old = StList->head;
-    Node** copy = &(copyS->head); // copy the head
 
     copyS->size = StrList_size(StList); // copying the size
 
@@ -314,10 +313,15 @@ StrList* StrList_clone(const StrList* StList)
     while(old)
     {
         str = (char*)malloc(strlen(old->string)+1); // deepcopy the String
+        if(str == NULL)
+        {
+            printf("Error string alloc!");
+            return 0;
+        }
         strcpy(str, old->string);
-        *copy= Node_alloc(str, NULL);
+        StrList_insertLast(copyS, str);
+        free(str);
         old= old->next;
-        copy= &((*copy)->next);
     }
     return copyS;
 }
@@ -417,8 +421,10 @@ int StrList_isSorted(StrList* StList)
     if(StrList_isEqual(StList,s )) // if the sorted version is equal to the original StrList
     {
         StrList_free(s);
+        free(s);
         return 1;
     }
     StrList_free(s);
+    free(s);
     return 0;
 }
