@@ -96,6 +96,13 @@ void StrList_insertLast(StrList* StrList,const char* data)
     char* temp_data = strdup(data); //convert const char to char
     Node* n = Node_alloc(temp_data, NULL);
 
+    if (n == NULL)
+    {
+        printf("Memory allocation failed");
+        free(temp_data);
+        return;
+    }
+
     // check for failed allocation
     if(StrList->head == NULL)
     {
@@ -132,8 +139,13 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     next_node = current->next;
 
     // create a new node containing the data
-    char* temp_data = strdup(data); //covert const char to char
+    char* temp_data = strdup(data); //convert const char to char
     Node* new_node = Node_alloc(temp_data, NULL);
+    if (new_node == NULL)
+    {
+        printf("Node allocation failed");
+        free(temp_data);
+    }
 
     // put the new node as child to the node index -1
     current->next = new_node;
